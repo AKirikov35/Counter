@@ -8,10 +8,9 @@ public class Counter : MonoBehaviour
     private float _delay = 0.5f;
     private bool _isActive = false;
     private Coroutine _countCoroutine;
+    private WaitForSeconds _waitForSeconds;
 
     public event Action<int> CountChanged;
-
-    public int CurrentCountValue => _currentCountValue;
 
     private void Update()
     {
@@ -47,11 +46,14 @@ public class Counter : MonoBehaviour
 
     private IEnumerator IncreaseCount()
     {
+        _waitForSeconds = new WaitForSeconds(_delay);
+
         while (_isActive)
         {
             _currentCountValue++;
             CountChanged?.Invoke(_currentCountValue);
-            yield return new WaitForSeconds(_delay);
+
+            yield return _waitForSeconds;
         }
     }
 }
